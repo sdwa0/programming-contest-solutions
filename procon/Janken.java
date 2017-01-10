@@ -34,47 +34,50 @@ class Janken {
     }
 
     private static double ProbAtLeastKConsecutiveWinsInNGames(int n, int k) {
-	State state = new State();
-	double ans = nextState(state, n, k);
-	return ans;
+        State state = new State();
+        double ans = nextState(state, n, k);
+        return ans;
     }
 
     private static double nextState(State state, int n, int k) {
-	//System.out.println("Called nextState(" + state.getTally() + ", " + n + ", " + k + ")");
-	double sum = 0;
-	State state1 = new State(state.getTally());
-	State state2 = new State(state.getTally());
+        //System.out.println("Called nextState(" + state.getTally() + ", " + n + ", " + k + ")");
+        double sum = 0;
+        State state1 = new State(state.getTally());
+        State state2 = new State(state.getTally());
 
-	// Add a win
-	state1.addWin();
-	sum += evaluateState(state1, n, k);
+        // Add a win
+        state1.addWin();
+        sum += evaluateState(state1, n, k);
 
-	// Add a loss
-	state2.addLoss();
-	sum += evaluateState(state2, n, k);
+        // Add a loss
+        state2.addLoss();
+        sum += evaluateState(state2, n, k);
 
-	//System.out.println("nextState(" + state.getTally() + ", " + n + ", " + k + ") = " + sum);
-	return sum;
+        //System.out.println("nextState(" + state.getTally() + ", " + n + ", " + k + ") = " + sum);
+        return sum;
     }
 
     private static double evaluateState(State state, int n, int k) {
-	//System.out.println("Called evaluateState(" + state.getTally() + ", " + n + ", " + k + ")");
+        //System.out.println("Called evaluateState(" + state.getTally() + ", " + n + ", " + k + ")");
+
+        // if k consecutive wins reached, exit
+        if (state.hasKConsecWins(k)) {
+            return state.getProb();
+        }
+
+        // if max trials reached, dismiss
+        if (state.getCount() == n ) {
+            return 0;
+        }
 
        	//if dismissable, dismiss
-	if (state.canBeDismissed(n, k)) {
-	    return 0;
-	}
-	// if k consecutive wins reached, exit
-	if (state.hasKConsecWins(k)) {
-	    return state.getProb();
-	}
-	// if max trials not reached continue
-	// if reached, dismiss
-	if (state.getCount() < n ) {
-	    return nextState(state, n, k);
-	} else {
-	    return 0;
-	}
+        if (state.canBeDismissed(n, k)) {
+            //System.out.println("Dismissing " + state.getTally());
+            return 0;
+        }
+
+        // if max trials not reached continue
+        return nextState(state, n, k);
     }
 }
 
