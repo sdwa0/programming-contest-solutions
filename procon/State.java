@@ -45,6 +45,13 @@ class State {
     }
 
     public boolean canBeDismissed(int n, int k) {
-	return (getWins() + n - getCount() < k);
+        if (tally.charAt(getCount() - 1) == 'L') {
+            return (n - getCount() < k);
+        } else {
+            // String[] strArray = StringUtils.split(tally, 'L');
+            // String last = strArray[strArray.length - 1];
+            // return (last.length() + n - getCount() < k);
+            return false;
+        }
     }
 }

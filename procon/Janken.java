@@ -62,6 +62,7 @@ class Janken {
 
         // if k consecutive wins reached, exit
         if (state.hasKConsecWins(k)) {
+            //System.out.println(state.getTally());
             return state.getProb();
         }
 
